@@ -4,7 +4,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
-import messages
+from . import messages
 
 class City(StatesGroup):
     city = State()
@@ -21,7 +21,7 @@ async def weather(callback: CallbackQuery, state: FSMContext) -> None:
 @router.message(City.city)
 async def process_city(message: Message, state: FSMContext) -> None:
    
-    answer = messages.wether(message.text)
+    answer = messages.weather(message.text.capitalize())
 
     if not answer:
         await message.answer('Что-то пошло не так...')

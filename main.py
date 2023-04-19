@@ -1,9 +1,7 @@
 from aiogram import Bot, Dispatcher
-
 from aiogram.fsm.storage.memory import MemoryStorage
-
-
 import asyncio
+
 import config
 import handlers
 from weather import handlers as weather_handlers
