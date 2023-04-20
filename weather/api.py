@@ -4,11 +4,6 @@ import json
 
 
 def get_weather(coordinates):
-
-    # url =  f"https://api.openweathermap.org/data/2.5/weather?"
-    # f"lat={coordinates['latitude']}&lon={coordinates['longitude']}&"
-    # f"appid={WEATHER_API_KEY}"
-
     url = 'https://api.openweathermap.org/data/2.5/weather'
 
     params = {
