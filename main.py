@@ -6,6 +6,7 @@ import config
 import handlers
 from weather import handlers as weather_handlers
 from currency_exchange import handlers as currency_exchange_handlers
+from animal import handlers as animal_handlers
 
 
 async def main():
@@ -16,6 +17,7 @@ async def main():
     dp.include_router(handlers.router)
     dp.include_router(weather_handlers.router)
     dp.include_router(currency_exchange_handlers.router)
+    dp.include_router(animal_handlers.router)
 
     await dp.start_polling(bot, skip_updates=True)
 
