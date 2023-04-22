@@ -6,15 +6,17 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import CallbackQuery, Message
 
-from .messages import question, option, confirm
+from .messages import question, option, confirm, chat_id
 from .keyboard import builder
 from main import bot
+import lang
 
 
 router = Router()
 
 
 class Polls(StatesGroup):
+    chat_id = State()
     question = State()
     options = State()
     confirm = State()
@@ -23,14 +25,29 @@ class Polls(StatesGroup):
 @router.message(Command('polls'))
 async def polls_handler(message: Message, state: FSMContext) -> None:
     """
-    Обрабатывает команду '/polls'. Отправляет сообщение для выбора вопроса.
+    Обрабатывает команду '/polls'. Отправляет сообщение для выбора id чата,
+    в который нужно отправить опрос. Устанавливает состояние 'Polls.question'.
+    """
+
+    await state.set_state(Polls.chat_id)
+
+    await message.answer(
+        text=chat_id(),
+    )
+
+
+@router.message(Polls.chat_id)
+async def chat_id_process(message: Message, state: FSMContext) -> None:
+    """
+    Обрабатывает сообщение с id чата. Отправляет сообщение для выбора вопроса.
     Устанавливает состояние 'Polls.question'.
     """
 
     await state.set_state(Polls.question)
+    await state.update_data(chat_id=message.text)
 
     await message.answer(
-        text=question()
+        text=question(),
     )
 
 
@@ -46,7 +63,7 @@ async def question_process(message: Message, state: FSMContext) -> None:
     await state.set_state(Polls.options)
 
     await message.answer(
-        text=option()
+        text=option(),
     )
 
 
@@ -83,22 +100,29 @@ async def confirm_process(callback: CallbackQuery, state: FSMContext) -> None:
     parsed_options = [option for option in data['options'] if len(option) > 0]
 
     if confirm:
-        await bot.send_poll(
-            chat_id='-1001937910353',
-            question=data['question'],
-            options=parsed_options,
-            is_anonymous=False,
-            allows_multiple_answers=False
-        )
+        try:        
+            await bot.send_poll(
+                chat_id=data['chat_id'],
+                question=data['question'],
+                options=parsed_options,
+                is_anonymous=False,
+                allows_multiple_answers=False,
+            )
+        except:
+            await callback.message.answer(
+                text=lang.ERROR_MESSAGE,
+            )
+
+            return
 
         await state.clear()
         await callback.message.answer(
-            text='Отправлено.'
+            text='Отправлено.',
         )
 
         return
 
     await state.clear()
     await callback.message.answer(
-        text='Не буду отправлять.'
+        text='Не буду отправлять.',
     )
