@@ -10,6 +10,7 @@ from aiogram.types import CallbackQuery, Message
 
 from .messages import currency_question, amount_question, currency_exchange
 from .keyboard import builder
+import lang
 
 
 class CurrencyExchange(StatesGroup):
@@ -34,6 +35,7 @@ async def currency_exchange_handler(message: Message, state: FSMContext) -> None
         reply_markup=builder.as_markup(),
     )
 
+
 @router.callback_query(CurrencyExchange.currency)
 async def process_currency(callback: CallbackQuery, state: FSMContext) -> None:
     """
@@ -47,6 +49,7 @@ async def process_currency(callback: CallbackQuery, state: FSMContext) -> None:
     await callback.message.answer(
         text=amount_question()
     )
+
 
 @router.message(CurrencyExchange.amount)
 async def process_amount(message: Message, state: FSMContext) -> None:
@@ -65,7 +68,7 @@ async def process_amount(message: Message, state: FSMContext) -> None:
     answer = currency_exchange(currency['currency']['from'], currency['currency']['to'], amount)
 
     if not answer:
-        await message.answer('Что-то пошло не так...')
+        await message.answer(lang.ERROR_MESSAGE)
         await state.clear()
         return
     

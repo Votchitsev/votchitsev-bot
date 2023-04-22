@@ -5,6 +5,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 
 from .messages import animal
+import lang
 
 
 router = Router()
@@ -23,7 +24,7 @@ async def animal_handler(message: Message) -> None:
 
     if not photo_url:
         await message.answer(
-            'Что-то пошло не так...'
+            lang.ERROR_MESSAGE
         )
 
     await message.answer_photo(photo_url)
