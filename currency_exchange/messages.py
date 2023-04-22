@@ -27,4 +27,4 @@ def currency_exchange(_from: str, to: str, amount: str) -> str:
     if not exchange_sum:
         return False
 
-    return f"На {amount} {_from} вы можете приобрести {exchange_sum} {to}."
+    return f"На {amount} {_from} вы можете приобрести {round(exchange_sum, 2)} {to}."

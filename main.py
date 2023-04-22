@@ -15,6 +15,7 @@ from polls import handlers as polls_handlers
 
 bot = Bot(token=config.BOT_TOKEN)
 
+
 async def main():
     """
     Инициализирует MemoryStorage, Dispatcher,

@@ -3,10 +3,12 @@
 import csv
 
 from .api import get_weather
+import lang
 
 
 def weather_city() -> str:
     """Возвращает сообщение с вопросом о выборе города для определения погоды"""
+
     return 'В каком городе вы хотите узнать погоду?'
 
 
@@ -31,7 +33,7 @@ def weather(city: str) -> str:
     if not weather:
         return False
 
-    return 'Сейчас в городе {city} температура воздуха {temp} C, ощущается как {feels} C давление - {pressure} мм. рт.ст.'.format(
+    return lang.WEATHER.format(
         city=city,
         temp=weather['temp'],
         feels=weather['feels_like'],
