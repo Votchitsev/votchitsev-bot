@@ -1,3 +1,5 @@
+"""Основной модуль."""
+
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 import asyncio
@@ -14,6 +16,12 @@ from polls import handlers as polls_handlers
 bot = Bot(token=config.BOT_TOKEN)
 
 async def main():
+    """
+    Инициализирует MemoryStorage, Dispatcher,
+    подключает обработчики, устанавливает команды
+    для меню и запускает бота.
+    """
+
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
 
