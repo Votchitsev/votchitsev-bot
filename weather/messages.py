@@ -22,6 +22,7 @@ def weather(city: str) -> str:
 
         for row in reader:
             if row['city'].find(city) != -1:
+                city = row['city']
                 coordinates['latitude'] = row['geo_lat']
                 coordinates['longitude'] = row['geo_lon']
         
@@ -37,5 +38,5 @@ def weather(city: str) -> str:
         city=city,
         temp=weather['temp'],
         feels=weather['feels_like'],
-        pressure=weather['pressure'],
+        pressure=round(int(weather['pressure']) * 0.75),
     )
