@@ -1,6 +1,9 @@
+"""Модуль обрабатывает пользовательские действия по получению курсов валют."""
+
 import json
+
 from aiogram import Router
-from aiogram.filters import Text
+from aiogram.filters import Command
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
@@ -17,16 +20,28 @@ class CurrencyExchange(StatesGroup):
 router = Router()
 
 
-@router.callback_query(Text('currency_exchange'))
-async def currency_exchange_handler(callback: CallbackQuery, state: FSMContext) -> None:
+@router.message(Command('currency'))
+async def currency_exchange_handler(message: Message, state: FSMContext) -> None:
+    """
+    Обрабатывает команду пользователя '/currency'.
+    Устанавливает состояние CurrencyExchange.currency.
+    Отправляет пользователю валюты для выбора.
+    """
+
     await state.set_state(CurrencyExchange.currency)
-    await callback.message.answer(
+    await message.answer(
         text=currency_question(),
         reply_markup=builder.as_markup(),
     )
 
 @router.callback_query(CurrencyExchange.currency)
 async def process_currency(callback: CallbackQuery, state: FSMContext) -> None:
+    """
+    Обрабатывает действие пользователя по выбору валюты.
+    Устанавливает состояние CurrencyExchange.amount.
+    Отправляет пользователю сообщение о выборе суммы валюты.
+    """
+
     await state.update_data(currency=json.loads(callback.data))
     await state.set_state(CurrencyExchange.amount)
     await callback.message.answer(
@@ -35,6 +50,11 @@ async def process_currency(callback: CallbackQuery, state: FSMContext) -> None:
 
 @router.message(CurrencyExchange.amount)
 async def process_amount(message: Message, state: FSMContext) -> None:
+    """
+    Обрабатывает ответ пользователя с выбором количества валюты.
+    Вызывает функцию currency_exchange для получения суммы обмена.
+    Если ответ корректный - отправляет, если нет - сообщение об ошибке.
+    """
     
     try:
         amount = int(message.text)

@@ -1,14 +1,16 @@
+"""Модуль формирует сообщения для ответа пользователю (погода)"""
+
 import csv
-from pprint import pprint
-from weather.api import get_weather
+
+from .api import get_weather
 
 
-def weather_city():
+def weather_city() -> str:
     """Возвращает сообщение с вопросом о выборе города для определения погоды"""
     return 'В каком городе вы хотите узнать погоду?'
 
 
-def weather(city):
+def weather(city: str) -> str:
     """Принимает аргумент - город и возвращает погоду"""
 
     coordinates = {}

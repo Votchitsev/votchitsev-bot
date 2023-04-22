@@ -1,6 +1,7 @@
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+"""Модуль инициализирует клавиатуру для создания опросов"""
 
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.types import InlineKeyboardButton
 
 builder = InlineKeyboardBuilder()
 

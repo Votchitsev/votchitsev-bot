@@ -1,5 +1,8 @@
-import requests
+"""Модулю взаимодействует по api c сервисом unsplash.com"""
+
 import json
+
+import requests
 
 from config import ANIMAL_API_KEY
 

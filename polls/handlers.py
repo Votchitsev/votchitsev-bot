@@ -1,12 +1,14 @@
+"""Модуль обрабатывает пользовательские действия по созданию опроса."""
+
 from aiogram import Router
-from aiogram.filters import Text, Command
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import CallbackQuery, Message, Poll, PollAnswer
+from aiogram.types import CallbackQuery, Message
 
-from main import bot
 from .messages import question, option, confirm
 from .keyboard import builder
+from main import bot
 
 
 router = Router()
@@ -18,17 +20,28 @@ class Polls(StatesGroup):
     confirm = State()
 
 
-@router.callback_query(Text('polls'))
-async def polls_handler(callback: CallbackQuery, state: FSMContext) -> None:
+@router.message(Command('polls'))
+async def polls_handler(message: Message, state: FSMContext) -> None:
+    """
+    Обрабатывает команду '/polls'. Отправляет сообщение для выбора вопроса.
+    Устанавливает состояние 'Polls.question'.
+    """
+
     await state.set_state(Polls.question)
 
-    await callback.message.answer(
+    await message.answer(
         text=question()
     )
 
 
 @router.message(Polls.question)
-async def question_process(message: Message, state: FSMContext):    
+async def question_process(message: Message, state: FSMContext) -> None:   
+    """
+    Обрабатывает сообщение пользователя с текстом вопроса (записывает в состояние).
+    Отправляет сообщение пользователю с вопросом о выборе вариантов ответа.
+    Устанавливает состояние 'Polls.options'.
+    """
+
     await state.update_data(question=message.text)
     await state.set_state(Polls.options)
 
@@ -38,7 +51,12 @@ async def question_process(message: Message, state: FSMContext):
 
 
 @router.message(Polls.options)
-async def options_process(message: Message, state: FSMContext):
+async def options_process(message: Message, state: FSMContext) -> None:
+    """
+    Обрабатывает сообщение пользователя с текстом вариантов ответа (записывает в состояние).
+    Отправляет пользователю сообщение для подтверждения отправки опроса.
+    """
+
     await state.update_data(options=message.text.split(';'))
 
     await state.set_state(Polls.confirm)
@@ -52,7 +70,12 @@ async def options_process(message: Message, state: FSMContext):
 
 
 @router.callback_query(Polls.confirm)
-async def confirm_process(callback: CallbackQuery, state: FSMContext):
+async def confirm_process(callback: CallbackQuery, state: FSMContext) -> None:
+    """
+    Обрабатывает действие пользователя по подтверждению
+    отправки формы.
+    """
+
     confirm = bool(int(callback.data))
 
     data = await state.get_data()

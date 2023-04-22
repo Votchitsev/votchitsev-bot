@@ -1,6 +1,9 @@
+"""Модуль инициализирует клавиатуру, которая используется в выборе валюты."""
+
 import json
+
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton
 
 
 builder = InlineKeyboardBuilder()

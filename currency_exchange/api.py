@@ -1,3 +1,5 @@
+"""Модуль выполняет функцию взаимодействия с api"""
+
 import json
 
 import requests
@@ -5,13 +7,13 @@ import requests
 from config import CURRENCY_API_KEY
 
 
-def get_exchange_amount(from_, to, amount):
+def get_exchange_amount(from_: str, to: str, amount: str) -> float:
     url = 'https://api.apilayer.com/exchangerates_data/convert'
 
     params = {
         'from': from_,
         'to': to,
-        'amount': amount
+        'amount': amount,
     }
 
     header = {
