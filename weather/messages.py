@@ -36,7 +36,7 @@ def weather(city: str) -> str:
 
     return lang.WEATHER.format(
         city=city,
-        temp=weather['temp'],
-        feels=weather['feels_like'],
+        temp=round(int(weather['temp'])),
+        feels=round(int(weather['feels_like'])),
         pressure=round(int(weather['pressure']) * 0.75),
     )
