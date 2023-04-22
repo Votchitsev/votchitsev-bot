@@ -6,7 +6,7 @@ from .api import get_exchange_amount
 def currency_question() -> str:
     """Возвращает вопрос по выбору валюты."""
 
-    return "Выберите пожалуйста валюту для обмена"
+    return "Выберите, пожалуйста, валюту для обмена."
 
 
 def amount_question() -> str:

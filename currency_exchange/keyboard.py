@@ -42,9 +42,10 @@ BTN_USD_RUB = InlineKeyboardButton(
     })
 )
 
-builder.add(
+builder.row(
     BTN_RUB_EUR,
     BTN_EUR_RUB,
+).row(
     BTN_RUB_USD,
     BTN_USD_RUB,
 )
